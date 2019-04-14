@@ -24,13 +24,22 @@ crashed=False
 
 x=display_width*0.45
 y=display_height*0.8
+x_changed=0
 
 while not crashed:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             crashed=True
+        if event.type == pygame.KEYDOWN:
+            if event.key==pygame.K_LEFT:
+                x_changed=-5
+            elif event.key==pygame.K_RIGHT:
+                x_changed=5
+        if event.type==pygame.KEYUP:
+            x_changed=0
         #print(event)
 
+    x+=x_changed
     gameDisplay.fill(white)
     car(x,y)
 
