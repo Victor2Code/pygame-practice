@@ -3,6 +3,7 @@
 #python 3
 
 import pygame
+import time 
 
 pygame.init()
 
@@ -12,6 +13,7 @@ car_width=73
 
 black=(0,0,0)
 white=(255,255,255)
+red=(255,0,0)
 
 gameDisplay=pygame.display.set_mode((800,600))
 pygame.display.set_caption('A bit Racey')
@@ -21,6 +23,21 @@ carImage=pygame.image.load('racecar_1.png')
 def car(x,y):
     gameDisplay.blit(carImage,(x,y))
 
+def text_object(text,font_name,font_size,font_color):
+    largeText=pygame.font.Font(font_name,font_size)
+    textSurface=largeText.render(text,True,font_color)
+    return textSurface,textSurface.get_rect()
+
+def message_display(text,font_name,font_size,font_color):
+    textSurf,testRect=text_object(text,font_name,font_size,font_color)
+    testRect.center=(display_width/2,display_height/2)
+    gameDisplay.blit(textSurf,testRect)
+    pygame.display.update()
+    #blit and update to add new object to display surface
+    time.sleep(2)
+
+def crash():
+    message_display('You Crashed','freesansbold.ttf',100,red)
 
 def game_loop():
     x=display_width*0.45
@@ -45,9 +62,12 @@ def game_loop():
         gameDisplay.fill(white)
         car(x,y)
         if x>display_width-car_width or x<0:
-            exitGame=True 
+            crash()
+            x=display_width*0.45
+            y=display_height*0.8
+            car(x,y)
         pygame.display.update()
-        clock.tick(30)
+        clock.tick(60)
 
 game_loop()
 pygame.quit()
