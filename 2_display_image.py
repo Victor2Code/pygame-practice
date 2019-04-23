@@ -5,6 +5,7 @@
 import pygame
 import time 
 import random
+import pysnooper
 
 pygame.init()
 
@@ -42,7 +43,7 @@ def message_display(text,font_name,font_size,font_color):
 
 def crash():
     message_display('You Crashed','freesansbold.ttf',100,red)
-
+@pysnooper.snoop('/home/fuhx/github/pygame-practice/test.log')
 def game_loop():
     x=display_width*0.45
     y=display_height*0.8
@@ -70,19 +71,29 @@ def game_loop():
             #print(event)
         x+=x_changed
         gameDisplay.fill(white)
-
+        
         things(thing_startx,thing_starty,thing_width,thing_height,black)
         thing_starty+=thing_speed
         if thing_starty>display_height:
             thing_startx=random.randrange(0,display_width)
             thing_starty=0-thing_height
-
+        
         car(x,y)
+        #crash handling
+        if y<thing_starty+thing_height and x>thing_startx-car_width and x<thing_startx+thing_width:
+            crash()
+            x=display_width*0.45
+            y=display_height*0.8
+            thing_starty=0-thing_height
+            thing_startx=random.randrange(0,display_width)
+            car(x,y)
+        #car(x,y)
         if x>display_width-car_width or x<0:
             crash()
             x=display_width*0.45
             y=display_height*0.8
             thing_starty=0-thing_height
+            thing_startx=random.randrange(0,display_width)
             car(x,y)
         pygame.display.update()
         clock.tick(60)
