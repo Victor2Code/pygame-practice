@@ -12,6 +12,7 @@ pygame.init()
 display_width=800
 display_height=600
 car_width=73
+car_height=82
 
 black=(0,0,0)
 white=(255,255,255)
@@ -80,7 +81,7 @@ def game_loop():
         
         car(x,y)
         #crash handling
-        if y<thing_starty+thing_height and x>thing_startx-car_width and x<thing_startx+thing_width:
+        if y<thing_starty+thing_height and y>thing_starty-car_height and x>thing_startx-car_width and x<thing_startx+thing_width:
             crash()
             x=display_width*0.45
             y=display_height*0.8
