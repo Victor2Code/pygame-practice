@@ -4,6 +4,7 @@
 
 import pygame
 import time 
+import random
 
 pygame.init()
 
@@ -22,6 +23,9 @@ clock=pygame.time.Clock()
 carImage=pygame.image.load('racecar_1.png')
 def car(x,y):
     gameDisplay.blit(carImage,(x,y))
+
+def things(thingx,thingy,thingw,thingh,color):
+    pygame.draw.rect(gameDisplay,color,[thingx,thingy,thingw,thingh])
 
 def text_object(text,font_name,font_size,font_color):
     largeText=pygame.font.Font(font_name,font_size)
@@ -44,6 +48,12 @@ def game_loop():
     y=display_height*0.8
     x_changed=0
     
+    thing_startx=random.randrange(0,display_width)
+    thing_starty=-600
+    thing_speed=7
+    thing_width=100
+    thing_height=100
+
     exitGame=False
 
     while not exitGame:
@@ -60,11 +70,19 @@ def game_loop():
             #print(event)
         x+=x_changed
         gameDisplay.fill(white)
+
+        things(thing_startx,thing_starty,thing_width,thing_height,black)
+        thing_starty+=thing_speed
+        if thing_starty>display_height:
+            thing_startx=random.randrange(0,display_width)
+            thing_starty=0-thing_height
+
         car(x,y)
         if x>display_width-car_width or x<0:
             crash()
             x=display_width*0.45
             y=display_height*0.8
+            thing_starty=0-thing_height
             car(x,y)
         pygame.display.update()
         clock.tick(60)
