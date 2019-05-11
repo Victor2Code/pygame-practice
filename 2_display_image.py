@@ -23,6 +23,12 @@ pygame.display.set_caption('A bit Racey')
 clock=pygame.time.Clock()
 
 carImage=pygame.image.load('racecar_1.png')
+def dodged(count):
+    dodgeFont=pygame.font.SysFont(None,25)
+    dodgeText=dodgeFont.render('Dodged:'+str(count),True,red)
+    gameDisplay.blit(dodgeText,(0,0))
+
+
 def car(x,y):
     gameDisplay.blit(carImage,(x,y))
 
@@ -55,6 +61,8 @@ def game_loop():
     thing_speed=7
     thing_width=100
     thing_height=100
+    
+    dodged_num=0 
 
     exitGame=False
 
@@ -74,12 +82,16 @@ def game_loop():
         gameDisplay.fill(white)
         
         things(thing_startx,thing_starty,thing_width,thing_height,black)
+        car(x,y)
+        dodged(dodged_num)
+        
         thing_starty+=thing_speed
         if thing_starty>display_height:
             thing_startx=random.randrange(0,display_width)
             thing_starty=0-thing_height
+            dodged_num+=1
+            thing_speed+=0.5
         
-        car(x,y)
         #crash handling
         if y<thing_starty+thing_height and y>thing_starty-car_height and x>thing_startx-car_width and x<thing_startx+thing_width:
             crash()
@@ -87,6 +99,8 @@ def game_loop():
             y=display_height*0.8
             thing_starty=0-thing_height
             thing_startx=random.randrange(0,display_width)
+            dodged_num=0
+            thing_speed=7
             car(x,y)
         #car(x,y)
         if x>display_width-car_width or x<0:
@@ -95,6 +109,8 @@ def game_loop():
             y=display_height*0.8
             thing_starty=0-thing_height
             thing_startx=random.randrange(0,display_width)
+            dodged_num=0
+            thing_speed=7
             car(x,y)
         pygame.display.update()
         clock.tick(60)
